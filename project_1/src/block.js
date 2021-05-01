@@ -32,8 +32,8 @@ class Block {
      */
   	//
   	generateHash() {
-        // Use this to create a temporary reference of the class object
-        let self = this;
+      // Use this to create a temporary reference of the class object
+      let self = this;
       //Implement your code here
       return new Promise(function(resolve, reject) {
         try {
@@ -60,7 +60,8 @@ class Block {
      */
     validate() {
         let self = this;
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
+          try {
             // Save in auxiliary variable the current block hash
             const oldHash = self.hash
 
@@ -68,10 +69,17 @@ class Block {
             // Comparing if the hashes changed
             // Returning the Block is not valid
             self.hash = null
-            self.generateHash()
+            await self.generateHash()
 
             // Returning the Block is valid
-            return self.hash === oldHash
+            if (self.hash === oldHash) {
+              resolve(true)
+            } else {
+              throw new Error('block is invalid')
+            }
+          } catch (ex) {
+            reject(false)
+          }
         });
     }
 
