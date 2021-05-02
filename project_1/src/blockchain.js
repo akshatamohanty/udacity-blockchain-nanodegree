@@ -79,6 +79,13 @@ class Blockchain {
                 // update blockchain
                 chain.push(block)
                 self.height = height
+
+                // validate the blockchain
+                const errors = await self.validateChain()
+                if (errors.length) {
+                    throw new Error('invalid blockchain')
+                }
+
                 resolve(self)
             } catch (err) {
                 reject(err)
@@ -238,7 +245,6 @@ class Blockchain {
                     // log error
                 }
             }
-            console.log('resolving')
             resolve(errorLog)
         });
     }
