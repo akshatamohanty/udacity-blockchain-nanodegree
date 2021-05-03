@@ -69,10 +69,11 @@ class Block {
             // Comparing if the hashes changed
             // Returning the Block is not valid
             self.hash = null
-            await self.generateHash()
+            let newHash = SHA256(JSON.stringify(self)).toString()
+            self.hash = oldHash
 
             // Returning the Block is valid
-            if (self.hash === oldHash) {
+            if (newHash === oldHash) {
               resolve(true)
             } else {
               throw new Error('block is invalid')
@@ -103,14 +104,11 @@ class Block {
         const json = JSON.parse(jsonString)
 
         // Resolve with the data if the object isn't the Genesis block
-        return new Promise((resolve, reject) => {
-            if (json.previousBlockHash === null) {
-                reject('genesis block')
-                return
-            }
+        if (json.previousBlockHash === null) {
+            return 'genesis block'
+        }
 
-            resolve(json)
-        })
+        return json
     }
 
 }

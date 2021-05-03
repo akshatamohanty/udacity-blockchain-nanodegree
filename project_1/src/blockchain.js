@@ -162,15 +162,11 @@ class Blockchain {
     getBlockByHash(hash) {
         let self = this;
         return new Promise((resolve, reject) => {
-            const blocks = self.chain.filter((block) => {
+            const block = self.chain.find((block) => {
                 return block.hash === hash
             })
 
-            if (blocks.length) {
-                resolve(blocks[0])
-            } else {
-                resolve(null)
-            }
+            resolve(block)
         });
     }
 
@@ -203,10 +199,10 @@ class Blockchain {
             try {
                 const chain = self.chain
                 let stars = []
-                chain.forEach(async block => {
-                    const blockData = await block.getBData()
+                chain.forEach(block => {
+                    const blockData = block.getBData()
                     if (blockData.owner && blockData.owner === address) {
-                        stars.push(blockData.star)
+                        stars.push(blockData)
                     }
                 })
 
@@ -227,7 +223,7 @@ class Blockchain {
         let self = this;
         let errorLog = [];
         return new Promise(async (resolve, reject) => {
-            for (let i=1; i < self.chain.length; i++) {
+            for (let i=0; i < self.chain.length; i++) {
                 try {
                     const block = self.chain[i]
                     const isValidBlock = await block.validate()
@@ -235,7 +231,7 @@ class Blockchain {
                         errorLog.push({ error: 'Block validation failed' })
                     }
 
-                    const previousHash = self.chain[i-1].hash
+                    const previousHash = self.chain[i-1] ? self.chain[i-1].hash : null
                     const isValidPreviousHash = block.previousBlockHash === previousHash
                     if (!isValidPreviousHash) {
                         errorLog.push({ error: 'Hash of previous block donot match' })
