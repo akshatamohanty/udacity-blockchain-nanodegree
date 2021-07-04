@@ -78,22 +78,43 @@ it('lets user2 buy a star and decreases its balance in ether', async() => {
 it('can add the star name and star symbol properly', async() => {
     // 1. create a Star with different tokenId
     //2. Call the name and symbol properties in your Smart Contract and compare with the name and symbol provided
+    let instance = await StarNotary.deployed();
+    assert.equal(await instance.name(), 'Aatoh')
+    assert.equal(await instance.symbol(), 'AATO')
 });
 
 it('lets 2 users exchange stars', async() => {
     // 1. create 2 Stars with different tokenId
     // 2. Call the exchangeStars functions implemented in the Smart Contract
     // 3. Verify that the owners changed
+    // let instance = await StarNotary.deployed();
+    // const tokenA = 7
+    // const tokenB = 8
+    // await instance.createStar('Awesome Star 1!', tokenA, {from: accounts[0]})
+    // await instance.createStar('Awesome Star 2!', tokenB, {from: accounts[1]})
+    // await instance.exchangeStars.call(tokenA, tokenB)
+    // assert.equal(await instance.ownerOf.call(tokenA), accounts[1])
+    // assert.equal(await instance.ownerOf.call(tokenB), accounts[0])
 });
 
 it('lets a user transfer a star', async() => {
     // 1. create a Star with different tokenId
     // 2. use the transferStar function implemented in the Smart Contract
     // 3. Verify the star owner changed.
+    const starId = 9
+    const user2 = accounts[2]
+    let instance = await StarNotary.deployed();
+    await instance.createStar('Awesome Star 1!', starId, {from: owner})
+    await instance.transferStar.call(user2, starId)
+    assert.equal(await instance.ownerOf.call(starId), user2)
 });
 
 it('lookUptokenIdToStarInfo test', async() => {
     // 1. create a Star with different tokenId
     // 2. Call your method lookUptokenIdToStarInfo
     // 3. Verify if you Star name is the same
+    let tokenId = 10;
+    let instance = await StarNotary.deployed();
+    await instance.createStar('Awesome Star!', tokenId, {from: accounts[0]})
+    assert.equal(await instance.lookUptokenIdToStarInfo.call(tokenId), 'Awesome Star!')
 });
