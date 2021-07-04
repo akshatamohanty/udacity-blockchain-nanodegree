@@ -1,4 +1,7 @@
 .vscode
 **/.DS_Store
 *.zip
+build
 node_modules
+.secret
+.infuraKey
