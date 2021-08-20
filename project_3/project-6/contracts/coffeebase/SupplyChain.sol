@@ -71,7 +71,7 @@ contract SupplyChain is Ownable, FarmerRole, DistributorRole, RetailerRole, Cons
 
   // Define a modifer that verifies the Caller
   modifier verifyCaller (address _address) {
-    require(msg.sender == _address);
+    require(msg.sender == _address, "Unable to verify caller");
     _;
   }
 
@@ -91,7 +91,7 @@ contract SupplyChain is Ownable, FarmerRole, DistributorRole, RetailerRole, Cons
 
   // Define a modifier that checks if an item.state of a upc is Harvested
   modifier harvested(uint _upc) {
-    require(items[_upc].itemState == State.Harvested);
+    require(items[_upc].itemState == State.Harvested, "Item state is not harvested");
     _;
   }
 
